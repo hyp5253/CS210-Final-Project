@@ -1,27 +1,39 @@
-import pygame
-import os
 from settings import *
-
-pygame.init()
-screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-pygame.display.set_caption("Data Structure Destroyer")
+from support import animation_parser
 
 
-background = pygame.image.load(os.path.join('Assets','Background','Cavern.png')).convert_alpha()
-background = pygame.transform.scale(background, (1080, 500))
-def draw_bg(): screen.blit(background, (0,0))
 
 
-running = True
-while running:
+class Game:
+    def __init__(self):
+        pygame.init()
+        self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+        pygame.display.set_caption("Placeholder")
+        self.running = True
 
-    draw_bg()
+
+      
+    def run_game(self):
+        sprite_sheet = animation_parser('Assets/Player/IDLE.png')
+
+        while self.running:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    self.running = False
+
+
+            self.screen.blit(sprite_sheet)
+
+
+
+            pygame.display.update()
+        pygame.quit()
+        
+if __name__ == "__main__":
+    game = Game()
+    game.run_game()
     
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
+    
 
-    pygame.display.update()
 
-pygame.quit()
 
