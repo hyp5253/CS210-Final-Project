@@ -1,5 +1,6 @@
 from settings import *
 from support import animation_parser
+from player import Player
 
 
 class Game:
@@ -9,19 +10,27 @@ class Game:
         pygame.display.set_caption("Placeholder")
         self.running = True
 
+        self.clock = pygame.time.Clock()
+        self.fps = 60
+
+        self.background = pygame.image.load('Assets/Background/Cavern.png')
+        self.background = pygame.transform.scale(self.background, (SCREEN_WIDTH, SCREEN_HEIGHT-BOTTOM_PANEL))
+        self.screen.fill(COLORS['GREY'])
+
+    def draw_bg(self): self.screen.blit(self.background, (0,0))
       
     def run_game(self):
-        frames = animation_parser('Assets/Player/IDLE.png', 84, 84, 2.5)
-        
+
+        idle_frames = animation_parser('Assets/Player/IDLE.png', 7, 96, 84, 2.5)
 
         while self.running:
+            self.clock.tick(self.fps)
+            self.draw_bg()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False
-
-            self.screen.blit(frames[len(frames)-1])
-
-
+                
+            # self.screen.blit(idle_frames[0], (150, 320))
 
             pygame.display.update()
         pygame.quit()

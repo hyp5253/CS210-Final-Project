@@ -7,7 +7,8 @@ SCREEN_WIDTH = 1080
 SCREEN_HEIGHT = 500 + BOTTOM_PANEL
 
 COLORS = {
-    'BLACK' : (0,0,0)
+    'BLACK' : (0,0,0),
+    'GREY' : (50,50,50)
 }
 
 
