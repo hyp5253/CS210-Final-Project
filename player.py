@@ -11,5 +11,4 @@ class Player(pygame.sprite.Sprite):
         self.image = self.animation[0]
 
 
-    def get_animation_list(self, path):
-        self.animation = animation_parser(path)
+    

@@ -2,8 +2,6 @@ from settings import *
 from support import animation_parser
 
 
-
-
 class Game:
     def __init__(self):
         pygame.init()
@@ -11,18 +9,17 @@ class Game:
         pygame.display.set_caption("Placeholder")
         self.running = True
 
-
       
     def run_game(self):
-        sprite_sheet = animation_parser('Assets/Player/IDLE.png')
+        frames = animation_parser('Assets/Player/IDLE.png', 84, 84, 2.5)
+        
 
         while self.running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False
 
-
-            self.screen.blit(sprite_sheet)
+            self.screen.blit(frames[len(frames)-1])
 
 
 
