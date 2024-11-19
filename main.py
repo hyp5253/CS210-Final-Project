@@ -22,6 +22,7 @@ class Game:
     def run_game(self):
 
         idle_frames = animation_parser('Assets/Player/IDLE.png', 7, 96, 84, 2.5)
+        knight = Player(250, 420, 300)
 
         while self.running:
             self.clock.tick(self.fps)
@@ -31,6 +32,8 @@ class Game:
                     self.running = False
                 
             # self.screen.blit(idle_frames[0], (150, 320))
+            knight.update('ATTACK 1')
+            knight.draw_player(self.screen)
 
             pygame.display.update()
         pygame.quit()
