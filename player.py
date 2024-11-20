@@ -7,8 +7,12 @@ class Player(pygame.sprite.Sprite):
 
         self.animations = {
             'IDLE' : animation_parser('Assets/Player/IDLE.png', 7, 96, 84, 2.5),
-            'ATTACK 1' : animation_parser('Assets/Player/ATTACK 1.png', 6, 96, 84, 2.5)
+            'DEATH' : animation_parser('Assets/Player/DEATH.png', 12, 96, 84, 2.5),
+            'ATTACK 1' : animation_parser('Assets/Player/ATTACK 1.png', 6, 96, 84, 2.5),
+            'ATTACK 2' : animation_parser('Assets/Player/ATTACK 2.png', 5, 96, 84, 2.5),
+            'ATTACK 3' : animation_parser('Assets/Player/ATTACK 3.png', 6, 96, 84, 2.5),
         }
+        
         self.actions = {}
 
         self.max_hp = max_hp
@@ -33,7 +37,8 @@ class Player(pygame.sprite.Sprite):
         if self.curr_frame >= len(self.animations[action]):
             self.curr_frame = 0
 
-              
+    def attack (self, target):
+        pass
 
     def draw_player(self, screen): screen.blit(self.image, self.rect)
 

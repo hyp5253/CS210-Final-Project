@@ -1,5 +1,4 @@
 from settings import *
-from support import animation_parser
 from player import Player
 
 
@@ -17,23 +16,32 @@ class Game:
         self.background = pygame.transform.scale(self.background, (SCREEN_WIDTH, SCREEN_HEIGHT-BOTTOM_PANEL))
         self.screen.fill(COLORS['GREY'])
 
+
     def draw_bg(self): self.screen.blit(self.background, (0,0))
       
     def run_game(self):
 
-        idle_frames = animation_parser('Assets/Player/IDLE.png', 7, 96, 84, 2.5)
         knight = Player(250, 420, 300)
+        # turn_queue = [knight]
+        # action_cooldown = 0
+        # action_wait_time = 90
 
         while self.running:
             self.clock.tick(self.fps)
             self.draw_bg()
+
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False
                 
-            # self.screen.blit(idle_frames[0], (150, 320))
-            knight.update('ATTACK 1')
+            knight.update('DEATH')
             knight.draw_player(self.screen)
+
+            # if knight.alive == True:
+            #     if turn_queue[0] == knight:
+            #         turn_queue.append(turn_queue.pop(0))
+            #         if action_cooldown >= action_wait_time:
+            #             knight.attack()
 
             pygame.display.update()
         pygame.quit()
