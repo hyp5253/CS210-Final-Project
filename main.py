@@ -1,44 +1,31 @@
 from settings import *
 from player import Player
-
+from button import Button
 
 pygame.init()
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Placeholder")
 running = True
 
-clock = pygame.time.Clock()
-fps = 60
-
 background = pygame.image.load('Assets/Background/Cavern.png')
 background = pygame.transform.scale(background, (SCREEN_WIDTH, SCREEN_HEIGHT-BOTTOM_PANEL))
 screen.fill(COLORS['GREY'])
 
-
 def draw_bg(): screen.blit(background, (0,0))
-      
 
+      
 knight = Player(250, 420, 300)
-# turn_queue = [knight]
-# action_cooldown = 0
-# action_wait_time = 90
+button = Button('Assets/Buttons/border 2.png', SCREEN_WIDTH//2, 500, 117, 59, 2.5, 'Start')
+
 
 while running:
-    clock.tick(fps)
-    draw_bg()
+    CLOCK.tick(FPS)
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-        
-    knight.update('DEATH')
-    knight.draw_player(screen)
 
-    # if knight.alive == True:
-    #     if turn_queue[0] == knight:
-    #         turn_queue.append(turn_queue.pop(0))
-    #         if action_cooldown >= action_wait_time:
-    #             knight.attack()
+    button.draw(screen)
 
     pygame.display.update()
 pygame.quit()

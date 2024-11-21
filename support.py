@@ -11,7 +11,6 @@ def get_frame(spritesheet, x, frame_w, frame_h, scale):
     frame.blit(spritesheet, (0,0), ((x * frame_w), 0, frame_w, frame_h))
     frame = pygame.transform.scale(frame, (frame_w*scale, frame_h*scale))
     frame.set_colorkey(COLORS['BLACK'])
-    #FIXME
     return frame
 
     
