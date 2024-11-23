@@ -5,7 +5,7 @@ SCREEN_WIDTH = 1080
 SCREEN_HEIGHT = 500 + BOTTOM_PANEL
 
 CLOCK = pygame.time.Clock()
-FPS = 40
+FPS = 60
 
 BUTTON_FONT = pygame.font.init()
 BUTTON_FONT = pygame.font.Font('Assets/Font/Jacquard12-Regular.ttf', 80)

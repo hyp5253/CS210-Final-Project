@@ -13,6 +13,8 @@ def get_frame(spritesheet, x, frame_w, frame_h, scale):
     frame.set_colorkey(COLORS['BLACK'])
     return frame
 
+
+
 def draw_title(screen, text, color, x, y):
     text_box = TITLE_FONT.render(text, False, color)
     text_rect = text_box.get_rect()

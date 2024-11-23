@@ -1,20 +1,15 @@
 from settings import *
 from support import animation_parser
 
-class Player(pygame.sprite.Sprite):
+class Demon(pygame.sprite.Sprite):
     def __init__ (self, x, y, max_hp):
         super().__init__()
 
         self.animations = {
-            'IDLE' : animation_parser('Assets/Player/IDLE.png', 7, 96, 84, 2.5),
-            'DEATH' : animation_parser('Assets/Player/DEATH.png', 12, 96, 84, 2.5),
-            'ATTACK 1' : animation_parser('Assets/Player/ATTACK 1.png', 6, 96, 84, 2.5),
-            'ATTACK 2' : animation_parser('Assets/Player/ATTACK 2.png', 5, 96, 84, 2.5),
-            'ATTACK 3' : animation_parser('Assets/Player/ATTACK 3.png', 6, 96, 84, 2.5),
+            'IDLE' : animation_parser('Assets/Enemies/Demon/IDLE.png', 4, 81, 71, 1),
+            'ATTACK' : [animation_parser('Assets/Enemies/Demon/ATTACK.png', 8, 81, 71, 1), 25]
         }
         
-        self.actions = {}
-
         self.max_hp = max_hp
         self.curr_hp = max_hp
         self.alive = True
@@ -39,18 +34,6 @@ class Player(pygame.sprite.Sprite):
 
     def draw_entity(self, screen): screen.blit(self.image, self.rect)
 
-    def attack (self, target):
-        pass
-
-
-class healthbar():
-    def __init__ (self, x, y, hp, max_hp):
-        self.x = x
-        self.y = y
-        self.hp = hp
-        self.max_hp = max_hp
-
-    def draw_bar(self, hp, screen):
-        pygame.draw.rect(screen, 'red', (self.x, self.y, 150, 20))
-
-    
+    def attack (self, attack_name, target):
+        damage = self.animations[attack_name][1]
+        target.curr_hp -= damage
