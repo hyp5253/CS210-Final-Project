@@ -9,6 +9,12 @@ class Button():
         self.draw_text(self.button_image, frame_w*scale, frame_h*scale, text)
         self.clicked = False
 
+    def draw_text(self, surface, surface_w, surface_h, text): 
+        text_rendered = BUTTON_FONT.render(text, False, 'white')
+        text_rect = text_rendered.get_rect()
+        text_rect.center = (surface_w//2, surface_h//2)
+        surface.blit(text_rendered, text_rect)
+
     def draw(self, screen): 
         pos = pygame.mouse.get_pos()
         action = False
@@ -24,11 +30,7 @@ class Button():
         screen.blit(self.button_image, self.rect)
         return action
 
-    def draw_text(self, button, button_w, button_h, text): 
-        text_rendered = BUTTON_FONT.render(text, False, 'white')
-        text_rect = text_rendered.get_rect()
-        text_rect.center = (button_w//2, button_h//2)
-        button.blit(text_rendered, text_rect)
+    
 
     
 

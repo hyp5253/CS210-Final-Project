@@ -37,9 +37,20 @@ class Player(pygame.sprite.Sprite):
         if self.curr_frame >= len(self.animations[action]):
             self.curr_frame = 0
 
+    def draw_entity(self, screen): screen.blit(self.image, self.rect)
+
     def attack (self, target):
         pass
 
-    def draw_player(self, screen): screen.blit(self.image, self.rect)
+
+class healthbar():
+    def __init__ (self, x, y, hp, max_hp):
+        self.x = x
+        self.y = y
+        self.hp = hp
+        self.max_hp = max_hp
+
+    def draw_bar(self, hp, screen):
+        pygame.draw.rect(screen, 'red', (self.x, self.y, 150, 20))
 
     
