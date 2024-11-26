@@ -1,6 +1,5 @@
 from settings import *
-from support import animation_parser
-
+from support import animation_parser, animation_parser_r
 
 class Knight(pygame.sprite.Sprite):
     def __init__ (self, x, y, max_hp):
@@ -13,14 +12,17 @@ class Knight(pygame.sprite.Sprite):
             'ATTACK 1' : [animation_parser('Assets/Player/ATTACK 1.png', 6, 96, 84, 2.5), 30],
             'ATTACK 2' : [animation_parser('Assets/Player/ATTACK 2.png', 5, 96, 84, 2.5), 40],
             'ATTACK 3' : [animation_parser('Assets/Player/ATTACK 3.png', 6, 96, 84, 2.5), 50],
+            'DEFEND' : [animation_parser('Assets/Player/DEFEND.png', 6, 96, 84, 2.5), 0]
         }
         
         self.action = 'IDLE'
 
+        self.defense = False
+
         self.max_hp = max_hp
         self.curr_hp = max_hp
         self.alive = True
-
+        
         self.image = self.animations[self.action][0][0]
         self.rect = self.image.get_rect()
         self.rect.center = (x, y)
@@ -44,9 +46,6 @@ class Knight(pygame.sprite.Sprite):
             else:
                 self.curr_frame = len(self.animations['DEATH'][0]) - 1
                 
-
-                
-
     def draw_entity(self, screen): screen.blit(self.image, self.rect)
 
     def attack (self, action, target):
@@ -61,28 +60,29 @@ class Knight(pygame.sprite.Sprite):
         if target.curr_hp <= 0:
             target.alive = False
             target.action = 'DEATH'
-            
 
+    def defend(self): 
+        self.curr_frame = 0
+        self.action = 'DEFEND'
+        self.update_time = pygame.time.get_ticks()
 
-   
 class Demon(pygame.sprite.Sprite):
     def __init__ (self, x, y, max_hp):
         pygame.sprite.Sprite().__init__()
 
         self.animations = {
-            'IDLE' : [animation_parser('Assets/Enemies/Demon/IDLE.png', 4, 81, 71, 1), 0],
-            'HURT' : [animation_parser('Assets/Enemies/Demon/HURT.png', 4, 81, 71, 1), 0],
-            'DEATH' : [animation_parser('Assets/Enemies/Demon/DEATH.png', 6, 81, 71, 1), 0],
-            'ATTACK' : [animation_parser('Assets/Enemies/Demon/ATTACK.png', 8, 81, 71, 1), 30],
-
-        }   
+            'IDLE' : [animation_parser('Assets/Enemies/Demon/IDLE.png', 4, 81, 71, 2.5), 0],
+            'HURT' : [animation_parser('Assets/Enemies/Demon/HURT.png', 4, 81, 71, 2.5), 0],
+            'DEATH' : [animation_parser('Assets/Enemies/Demon/DEATH.png', 6, 81, 71, 2.5), 0],
+            'ATTACK' : [animation_parser('Assets/Enemies/Demon/ATTACK.png', 8, 81, 71, 2.5), 30],
+        }  
         
         self.action = 'IDLE'
 
         self.max_hp = max_hp
         self.curr_hp = max_hp
         self.alive = True
-
+        
         self.image = self.animations[self.action][0][0]
         self.rect = self.image.get_rect()
         self.rect.center = (x, y)
@@ -105,7 +105,7 @@ class Demon(pygame.sprite.Sprite):
                 self.action = 'IDLE'
             else:
                 self.curr_frame = len(self.animations['DEATH'][0]) - 1
-
+                
     def draw_entity(self, screen): screen.blit(self.image, self.rect)
 
     def attack (self, action, target):
@@ -114,9 +114,73 @@ class Demon(pygame.sprite.Sprite):
         self.update_time = pygame.time.get_ticks()
 
         damage = self.animations[action][1]
-        target.curr_hp -= damage
+        if not target.defense:
+            target.curr_hp -= damage
+        else:
+            target.curr_hp -= damage//3
+            target.defense = False
         target.curr_frame = 0
         target.action = 'HURT'
         if target.curr_hp <= 0:
             target.alive = False
             target.action = 'DEATH'
+
+class Slime(pygame.sprite.Sprite):
+    def __init__ (self, x, y, max_hp):
+        pygame.sprite.Sprite().__init__()
+
+        self.animations = {
+            'IDLE' : [animation_parser_r('Assets/Enemies/Slime/IDLE.png', 4, 64, 64, 3), 0],
+            'ATTACK' : [animation_parser_r('Assets/Enemies/Slime/ATTACK.png', 4, 64, 64, 3), 35],
+            'HURT' : [animation_parser_r('Assets/Enemies/Slime/HURT.png', 4, 64, 64, 3), 0],
+            'DEATH' : [animation_parser_r('Assets/Enemies/Slime/DEATH.png', 4, 64, 64, 3), 0],
+        }  
+        
+        self.action = 'IDLE'
+
+        self.max_hp = max_hp
+        self.curr_hp = max_hp
+        self.alive = True
+        
+        self.image = self.animations[self.action][0][0]
+        self.rect = self.image.get_rect()
+        self.rect.center = (x, y)
+
+        self.update_time = pygame.time.get_ticks()
+        self.curr_frame = 0
+
+    def update(self):
+        cooldown = 100
+        self.image = self.animations[self.action][0][self.curr_frame]
+
+        if pygame.time.get_ticks() - self.update_time > cooldown:
+            self.update_time = pygame.time.get_ticks()
+            self.curr_frame += 1
+
+        if self.curr_frame >= len(self.animations[self.action][0]):
+            if self.action is not 'DEATH':
+                self.curr_frame = 0
+                self.update_time = pygame.time.get_ticks()
+                self.action = 'IDLE'
+            else:
+                self.curr_frame = len(self.animations['DEATH'][0]) - 1
+                
+    def draw_entity(self, screen): screen.blit(self.image, self.rect)
+
+    def attack (self, action, target):
+        self.curr_frame = 0
+        self.action = action
+        self.update_time = pygame.time.get_ticks()
+
+        damage = self.animations[action][1]
+        if not target.defense:
+            target.curr_hp -= damage
+        else:
+            target.curr_hp -= damage//3
+            target.defense = False
+        target.curr_frame = 0
+        target.action = 'HURT'
+        if target.curr_hp <= 0:
+            target.alive = False
+            target.action = 'DEATH'
+
