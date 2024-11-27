@@ -2,20 +2,23 @@ from settings import *
 from support import *
 from entity import Knight, Demon, Slime
 from healthbar import Healthbar
-from button import Button
+from skills import *
+from menu_button import Button
 
 pygame.init()
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Placeholder")
 
-background = pygame.image.load('Assets/Background/Cavern.png')
-background = pygame.transform.scale(background, (SCREEN_WIDTH, SCREEN_HEIGHT-BOTTOM_PANEL))
+cavern = pygame.image.load('Assets/Background/Cavern.png').convert_alpha()
+cavern = pygame.transform.scale(cavern, (SCREEN_WIDTH, SCREEN_HEIGHT-BOTTOM_PANEL))
+forest = pygame.image.load('Assets/Background/Dead_Forest.png').convert_alpha()
+forest = pygame.transform.scale(forest, (SCREEN_WIDTH, SCREEN_HEIGHT-BOTTOM_PANEL))
+panel = pygame.image.load('Assets/Background/panel.png').convert_alpha()
+panel = pygame.transform.scale(panel, (SCREEN_WIDTH, BOTTOM_PANEL))
 screen.fill(COLORS['GREY'])
       
 knight = Knight(250, 420, 300) # going to be a global variable (any updates will be tracked)
-
 knight_healthbar = Healthbar(SCREEN_WIDTH//6, SCREEN_HEIGHT-BOTTOM_PANEL+25, knight.max_hp, knight.max_hp)
-        
 
 def level_1():
     knight.curr_hp = knight.max_hp
@@ -24,10 +27,11 @@ def level_1():
 
     running = True
     turn = [knight, slime]
-    wait = 150
+    wait = 100
     cooldown = 0
-    
+
     while running:
+        CLOCK.tick(FPS)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -35,39 +39,44 @@ def level_1():
                 running = False
 
         screen.fill(COLORS['GREY'])
-        draw_bg(screen, background)
+        draw_bg(screen, cavern)
+        draw_panel(screen, panel)
 
         knight_healthbar.draw_bar(knight.curr_hp, screen)
         slime_healthbar.draw_bar(slime.curr_hp, screen)
+
+        for skill in skill_tree:
+            skill.draw_skill(screen)
 
         knight.update()
         knight.draw_entity(screen)
         slime.update()
         slime.draw_entity(screen)
-        
-        test1 = pygame.draw.rect(screen, 'red', ((SCREEN_WIDTH//6), 600, 20, 20))
-        test2 = pygame.draw.rect(screen, 'red', ((SCREEN_WIDTH//6)+30, 600, 20, 20))
-        test3 = pygame.draw.rect(screen, 'red', ((SCREEN_WIDTH//6)+60, 600, 20, 20))
 
-        if knight.alive and turn[0] is knight:
-            if test1.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_just_pressed()[0]:
-                    knight.attack('ATTACK 1', slime)
-                    turn.append(turn.pop(0))
 
-            if test2.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_just_pressed()[0]:
-                    knight.attack('ATTACK 2', slime)
-                    turn.append(turn.pop(0))
+        if knight.alive and turn[0] is knight: 
+            if attack_1.rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_just_pressed()[0]:
+                knight.attack('ATTACK 1', slime)
+                turn.append(turn.pop(0))
+            
+            if attack_2.rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_just_pressed()[0]:
+                knight.attack('ATTACK 2', slime)
+                turn.append(turn.pop(0))
 
-            if test3.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_just_pressed()[0]:
-                    knight.attack('ATTACK 3', slime)
-                    turn.append(turn.pop(0))
+            if attack_3.rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_just_pressed()[0]:
+                knight.attack('ATTACK 3', slime)
+                turn.append(turn.pop(0))
+
+            if defend.rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_just_pressed()[0]:
+                knight.defend()
+                turn.append(turn.pop(0))
 
         elif slime.alive and turn[0] == slime:
-                cooldown += 1
-                if cooldown >= wait:
-                    slime.attack('ATTACK', knight)
-                    turn.append(turn.pop(0))
-                    cooldown = 0
+            cooldown += 1
+            if cooldown >= wait:
+                slime.attack('ATTACK', knight)
+                turn.append(turn.pop(0))
+                cooldown = 0
 
         pygame.display.update()
 
@@ -89,7 +98,7 @@ def level_2():
                 running = False
 
         screen.fill(COLORS['GREY'])
-        draw_bg(screen, background)
+        draw_bg(screen, cavern)
 
         knight_healthbar.draw_bar(knight.curr_hp, screen)
         demon_healthbar.draw_bar(demon.curr_hp, screen)

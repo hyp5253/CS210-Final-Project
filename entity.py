@@ -14,9 +14,9 @@ class Knight(pygame.sprite.Sprite):
             'ATTACK 3' : [animation_parser('Assets/Player/ATTACK 3.png', 6, 96, 84, 2.5), 50],
             'DEFEND' : [animation_parser('Assets/Player/DEFEND.png', 6, 96, 84, 2.5), 0]
         }
-        
-        self.action = 'IDLE'
 
+
+        self.action = 'IDLE'
         self.defense = False
 
         self.max_hp = max_hp

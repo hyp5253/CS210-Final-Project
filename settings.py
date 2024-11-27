@@ -18,11 +18,3 @@ COLORS = {
     'GREY' : (50,50,50)
 }
 
-
-PLAYER_ABILITIES = {
-    
-}
-
-ELEMENT_DATA = {
-
-}
