@@ -1,7 +1,7 @@
 from settings import *
 from support import *
 from skills import *
-from entity import Knight, Demon, Slime
+from entity import Knight, Demon, Slime, Wolf
 from healthbar import Healthbar
 from menu_button import Button
 
@@ -20,7 +20,7 @@ screen.fill(COLORS['GREY'])
 knight = Knight(250, 420, 400) 
 knight_healthbar = Healthbar(SCREEN_WIDTH//6, SCREEN_HEIGHT-BOTTOM_PANEL+25, knight.max_hp, knight.max_hp)
 
-def level_1():
+def level_slime():
     knight.curr_hp = knight.max_hp
     slime = Slime(780, 430, 300)
     slime_healthbar = Healthbar((SCREEN_WIDTH//6)*4, SCREEN_HEIGHT-BOTTOM_PANEL+25, slime.max_hp, slime.max_hp)
@@ -79,20 +79,77 @@ def level_1():
 
         pygame.display.update()
 
-        if knight.alive and not slime.alive:
-            attack_2.unlocked = True
+def level_wolf():
+    knight.curr_hp = knight.max_hp
+    wolf = Wolf(780, 400, 300)
+    wolf_healthbar = Healthbar((SCREEN_WIDTH//6)*4, SCREEN_HEIGHT-BOTTOM_PANEL+25, wolf.max_hp, wolf.max_hp)
 
-def level_2():
+    running = True
+    turn = [knight, wolf]
+    wait = 100
+    cooldown = 0
+
+    while running:
+        CLOCK.tick(FPS)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+            if event.type == pygame.KEYDOWN and pygame.key.get_pressed()[pygame.K_ESCAPE]:
+                running = False
+
+        screen.fill(COLORS['GREY'])
+        draw_bg(screen, forest)
+        draw_panel(screen, panel)
+
+        knight_healthbar.draw_bar(knight.curr_hp, screen)
+        wolf_healthbar.draw_bar(wolf.curr_hp, screen)
+
+        breadth_first_traversal(attack_1, screen)
+
+        knight.update()
+        knight.draw_entity(screen)
+        wolf.update()
+        wolf.draw_entity(screen)
+
+
+        if knight.alive and turn[0] is knight: 
+            if attack_1.rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_just_pressed()[0] and attack_1.unlocked:
+                knight.attack('ATTACK 1', wolf)
+                turn.append(turn.pop(0))
+            
+            if attack_2.rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_just_pressed()[0] and attack_2.unlocked:
+                knight.attack('ATTACK 2', wolf)
+                turn.append(turn.pop(0))
+
+            if attack_3.rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_just_pressed()[0] and attack_3.unlocked:
+                knight.attack('ATTACK 3', wolf)
+                turn.append(turn.pop(0))
+
+            if defend.rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_just_pressed()[0] and defend.unlocked:
+                knight.defend()
+                turn.append(turn.pop(0))
+
+        elif wolf.alive and turn[0] == wolf:
+            cooldown += 1
+            if cooldown >= wait:
+                wolf.attack('ATTACK', knight)
+                turn.append(turn.pop(0))
+                cooldown = 0
+
+        pygame.display.update()
+
+def level_demon():
     knight.curr_hp = knight.max_hp
     demon = Demon(800, 400, 300)
     demon_healthbar = Healthbar((SCREEN_WIDTH//6)*4, SCREEN_HEIGHT-BOTTOM_PANEL+25, demon.max_hp, demon.max_hp)
 
     running = True
     turn = [knight, demon]
-    wait = 150
+    wait = 100
     cooldown = 0
-    
+
     while running:
+        CLOCK.tick(FPS)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -101,45 +158,42 @@ def level_2():
 
         screen.fill(COLORS['GREY'])
         draw_bg(screen, cavern)
+        draw_panel(screen, panel)
 
         knight_healthbar.draw_bar(knight.curr_hp, screen)
         demon_healthbar.draw_bar(demon.curr_hp, screen)
+
+        breadth_first_traversal(attack_1, screen)
 
         knight.update()
         knight.draw_entity(screen)
         demon.update()
         demon.draw_entity(screen)
-        
-        test1 = pygame.draw.rect(screen, 'red', ((SCREEN_WIDTH//6), 600, 20, 20))
-        test2 = pygame.draw.rect(screen, 'red', ((SCREEN_WIDTH//6)+30, 600, 20, 20))
-        test3 = pygame.draw.rect(screen, 'red', ((SCREEN_WIDTH//6)+60, 600, 20, 20))
-        test4 = pygame.draw.rect(screen, 'red', ((SCREEN_WIDTH//6)+90, 600, 20, 20))
 
 
-        if knight.alive and turn[0] is knight:
-            if test1.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_just_pressed()[0]:
-                    knight.attack('ATTACK 1', demon)
-                    turn.append(turn.pop(0))
+        if knight.alive and turn[0] is knight: 
+            if attack_1.rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_just_pressed()[0] and attack_1.unlocked:
+                knight.attack('ATTACK 1', demon)
+                turn.append(turn.pop(0))
+            
+            if attack_2.rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_just_pressed()[0] and attack_2.unlocked:
+                knight.attack('ATTACK 2', demon)
+                turn.append(turn.pop(0))
 
-            if test2.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_just_pressed()[0]:
-                    knight.attack('ATTACK 2', demon)
-                    turn.append(turn.pop(0))
+            if attack_3.rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_just_pressed()[0] and attack_3.unlocked:
+                knight.attack('ATTACK 3', demon)
+                turn.append(turn.pop(0))
 
-            if test3.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_just_pressed()[0]:
-                    knight.attack('ATTACK 3', demon)
-                    turn.append(turn.pop(0))
-
-            if test4.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_just_pressed()[0]:
-                    knight.defend()
-                    turn.append(turn.pop(0))
+            if defend.rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_just_pressed()[0] and defend.unlocked:
+                knight.defend()
+                turn.append(turn.pop(0))
 
         elif demon.alive and turn[0] == demon:
-                cooldown += 1
-                if cooldown >= wait:
-                    demon.attack('ATTACK', knight)
-                    turn.append(turn.pop(0))
-                    cooldown = 0
-
+            cooldown += 1
+            if cooldown >= wait:
+                demon.attack('ATTACK', knight)
+                turn.append(turn.pop(0))
+                cooldown = 0
 
         pygame.display.update()
 
@@ -158,11 +212,15 @@ def map():
 
         lvl1 = pygame.draw.rect(screen, 'red', ((SCREEN_WIDTH//2), 100, 20, 20))
         if lvl1.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_just_pressed()[0]:
-            level_1()
+            level_wolf()
 
         lvl2 = pygame.draw.rect(screen, 'red', ((SCREEN_WIDTH//2), 200, 20, 20))
         if lvl2.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_just_pressed()[0]:
-            level_2()
+            level_slime()
+
+        lvl3 = pygame.draw.rect(screen, 'red', ((SCREEN_WIDTH//2), 300, 20, 20))
+        if lvl3.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_just_pressed()[0]:
+            level_demon()
         
 
         pygame.display.update()
