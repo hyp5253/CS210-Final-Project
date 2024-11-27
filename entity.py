@@ -1,4 +1,5 @@
 from settings import *
+import random
 from support import animation_parser, animation_parser_r
 
 class Knight(pygame.sprite.Sprite):
@@ -10,8 +11,8 @@ class Knight(pygame.sprite.Sprite):
             'HURT' : [animation_parser('Assets/Player/HURT.png', 4, 96, 84, 2.5), 0],
             'DEATH' : [animation_parser('Assets/Player/DEATH.png', 12, 96, 84, 2.5), 0],
             'ATTACK 1' : [animation_parser('Assets/Player/ATTACK 1.png', 6, 96, 84, 2.5), 30],
-            'ATTACK 2' : [animation_parser('Assets/Player/ATTACK 2.png', 5, 96, 84, 2.5), 40],
-            'ATTACK 3' : [animation_parser('Assets/Player/ATTACK 3.png', 6, 96, 84, 2.5), 50],
+            'ATTACK 2' : [animation_parser('Assets/Player/ATTACK 2.png', 5, 96, 84, 2.5), 45],
+            'ATTACK 3' : [animation_parser('Assets/Player/ATTACK 3.png', 6, 96, 84, 2.5), 75],
             'DEFEND' : [animation_parser('Assets/Player/DEFEND.png', 6, 96, 84, 2.5), 0]
         }
 
@@ -117,7 +118,11 @@ class Demon(pygame.sprite.Sprite):
         if not target.defense:
             target.curr_hp -= damage
         else:
-            target.curr_hp -= damage//3
+            random_num = random.randint(1, 10)
+            if random_num >= 3:
+                target.curr_hp -= damage//4
+            else:
+                target.curr_hp -= damage
             target.defense = False
         target.curr_frame = 0
         target.action = 'HURT'
@@ -176,7 +181,11 @@ class Slime(pygame.sprite.Sprite):
         if not target.defense:
             target.curr_hp -= damage
         else:
-            target.curr_hp -= damage//3
+            random_num = random.randint(1, 10)
+            if random_num >= 3:
+                target.curr_hp -= damage//4
+            else:
+                target.curr_hp -= damage
             target.defense = False
         target.curr_frame = 0
         target.action = 'HURT'

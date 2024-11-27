@@ -27,6 +27,8 @@ def draw_title(screen, text, color, x, y):
 
 def draw_bg(screen, background): screen.blit(background, (0,0))
 
+def draw_menu_bg(screen, background): screen.blit(background, (0,110))
+
 def draw_panel(screen, panel): screen.blit(panel, (0, (SCREEN_HEIGHT-BOTTOM_PANEL)))
 
     

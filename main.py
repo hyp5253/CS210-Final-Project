@@ -1,8 +1,8 @@
 from settings import *
 from support import *
+from skills import *
 from entity import Knight, Demon, Slime
 from healthbar import Healthbar
-from skills import *
 from menu_button import Button
 
 pygame.init()
@@ -17,7 +17,7 @@ panel = pygame.image.load('Assets/Background/panel.png').convert_alpha()
 panel = pygame.transform.scale(panel, (SCREEN_WIDTH, BOTTOM_PANEL))
 screen.fill(COLORS['GREY'])
       
-knight = Knight(250, 420, 300) # going to be a global variable (any updates will be tracked)
+knight = Knight(250, 420, 400) 
 knight_healthbar = Healthbar(SCREEN_WIDTH//6, SCREEN_HEIGHT-BOTTOM_PANEL+25, knight.max_hp, knight.max_hp)
 
 def level_1():
@@ -45,8 +45,7 @@ def level_1():
         knight_healthbar.draw_bar(knight.curr_hp, screen)
         slime_healthbar.draw_bar(slime.curr_hp, screen)
 
-        for skill in skill_tree:
-            skill.draw_skill(screen)
+        breadth_first_traversal(attack_1, screen)
 
         knight.update()
         knight.draw_entity(screen)
@@ -55,19 +54,19 @@ def level_1():
 
 
         if knight.alive and turn[0] is knight: 
-            if attack_1.rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_just_pressed()[0]:
+            if attack_1.rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_just_pressed()[0] and attack_1.unlocked:
                 knight.attack('ATTACK 1', slime)
                 turn.append(turn.pop(0))
             
-            if attack_2.rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_just_pressed()[0]:
+            if attack_2.rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_just_pressed()[0] and attack_2.unlocked:
                 knight.attack('ATTACK 2', slime)
                 turn.append(turn.pop(0))
 
-            if attack_3.rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_just_pressed()[0]:
+            if attack_3.rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_just_pressed()[0] and attack_3.unlocked:
                 knight.attack('ATTACK 3', slime)
                 turn.append(turn.pop(0))
 
-            if defend.rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_just_pressed()[0]:
+            if defend.rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_just_pressed()[0] and defend.unlocked:
                 knight.defend()
                 turn.append(turn.pop(0))
 
@@ -79,6 +78,9 @@ def level_1():
                 cooldown = 0
 
         pygame.display.update()
+
+        if knight.alive and not slime.alive:
+            attack_2.unlocked = True
 
 def level_2():
     knight.curr_hp = knight.max_hp
@@ -145,6 +147,7 @@ def map():
     running = True
 
     while running:
+        CLOCK.tick(FPS)
         screen.fill(COLORS['GREY'])
 
         for event in pygame.event.get():
@@ -172,12 +175,11 @@ def main_menu():
         CLOCK.tick(FPS)
 
         screen.fill(COLORS['GREY'])
+        draw_menu_bg(screen, cavern)
         draw_title(screen, 'Dungeon Destroyer', 'white', SCREEN_WIDTH//2, 275)
 
         if start_button.draw(screen):
             map()
-        if skills.draw(screen):
-            print('skill tree')
             
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
