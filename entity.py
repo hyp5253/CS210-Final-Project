@@ -260,3 +260,67 @@ class Wolf(pygame.sprite.Sprite):
         if target.curr_hp <= 0:
             target.alive = False
             target.action = 'DEATH'
+
+class Golem(pygame.sprite.Sprite): #FIXME
+    def __init__ (self, x, y, max_hp):
+        pygame.sprite.Sprite().__init__()
+
+        self.animations = {
+         
+        }  
+
+        self.animations['ATTACK'][0] += (animation_parser('Assets/Enemies/Dark Wolf/ATTACK 1-2.png', 3, 48, 32, 4))
+        self.animations['DEATH'][0] += (animation_parser('Assets/Enemies/Dark Wolf/DEATH.png', 4, 48, 32, 4))
+        
+
+        self.action = 'IDLE'
+
+        self.max_hp = max_hp
+        self.curr_hp = max_hp
+        self.alive = True
+        
+        self.image = self.animations[self.action][0][0]
+        self.rect = self.image.get_rect()
+        self.rect.center = (x, y)
+
+        self.update_time = pygame.time.get_ticks()
+        self.curr_frame = 0
+
+    def update(self):
+        cooldown = 100
+        self.image = self.animations[self.action][0][self.curr_frame]
+
+        if pygame.time.get_ticks() - self.update_time > cooldown:
+            self.update_time = pygame.time.get_ticks()
+            self.curr_frame += 1
+
+        if self.curr_frame >= len(self.animations[self.action][0]):
+            if self.action is not 'DEATH':
+                self.curr_frame = 0
+                self.update_time = pygame.time.get_ticks()
+                self.action = 'IDLE'
+            else:
+                self.curr_frame = len(self.animations['DEATH'][0]) - 1
+                
+    def draw_entity(self, screen): screen.blit(self.image, self.rect)
+
+    def attack (self, action, target):
+        self.curr_frame = 0
+        self.action = action
+        self.update_time = pygame.time.get_ticks()
+
+        damage = self.animations[action][1]
+        if not target.defense:
+            target.curr_hp -= damage
+        else:
+            random_num = random.randint(1, 10)
+            if random_num >= 3:
+                target.curr_hp -= damage//4
+            else:
+                target.curr_hp -= damage
+            target.defense = False
+        target.curr_frame = 0
+        target.action = 'HURT'
+        if target.curr_hp <= 0:
+            target.alive = False
+            target.action = 'DEATH'

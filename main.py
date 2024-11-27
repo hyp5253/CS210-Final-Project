@@ -22,7 +22,7 @@ knight_healthbar = Healthbar(SCREEN_WIDTH//6, SCREEN_HEIGHT-BOTTOM_PANEL+25, kni
 
 def level_slime():
     knight.curr_hp = knight.max_hp
-    slime = Slime(780, 430, 300)
+    slime = Slime(780, 430, 400)
     slime_healthbar = Healthbar((SCREEN_WIDTH//6)*4, SCREEN_HEIGHT-BOTTOM_PANEL+25, slime.max_hp, slime.max_hp)
 
     running = True
@@ -200,6 +200,22 @@ def level_demon():
 def map():
     running = True
 
+    slime_img_list = animation_parser('Assets/Enemies/Slime/IDLE.png', 4, 64, 64, 6)
+    slime_img = slime_img_list[0]
+    slime_rect = slime_img.get_rect()
+    slime_rect.center = (SCREEN_WIDTH//3, 300)
+
+    wolf_img_list = animation_parser('Assets/Enemies/Dark Wolf/IDLE.png', 4, 48, 32, 4)
+    wolf_img = wolf_img_list[0]
+    wolf_rect = wolf_img.get_rect()
+    wolf_rect.center = (SCREEN_WIDTH//2, 150)
+
+    demon_img_list = animation_parser('Assets/Enemies/Demon/IDLE.png', 4, 81, 71, 2.5)
+    demon_img = demon_img_list[0]
+    demon_rect = demon_img.get_rect()
+    demon_rect.center = ((SCREEN_WIDTH//3)*2, 350)
+
+
     while running:
         CLOCK.tick(FPS)
         screen.fill(COLORS['GREY'])
@@ -210,16 +226,17 @@ def map():
             if event.type == pygame.KEYDOWN and pygame.key.get_pressed()[pygame.K_ESCAPE]:
                 running = False
 
-        lvl1 = pygame.draw.rect(screen, 'red', ((SCREEN_WIDTH//2), 100, 20, 20))
-        if lvl1.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_just_pressed()[0]:
+        screen.blit(slime_img, slime_rect)
+        screen.blit(wolf_img, wolf_rect)
+        screen.blit(demon_img, demon_rect)
+       
+        if wolf_rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_just_pressed()[0]:
             level_wolf()
 
-        lvl2 = pygame.draw.rect(screen, 'red', ((SCREEN_WIDTH//2), 200, 20, 20))
-        if lvl2.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_just_pressed()[0]:
+        if slime_rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_just_pressed()[0]:
             level_slime()
 
-        lvl3 = pygame.draw.rect(screen, 'red', ((SCREEN_WIDTH//2), 300, 20, 20))
-        if lvl3.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_just_pressed()[0]:
+        if demon_rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_just_pressed()[0]:
             level_demon()
         
 
