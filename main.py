@@ -1,3 +1,4 @@
+from pygame import mixer
 from settings import *
 from support import *
 from skills import *
@@ -6,15 +7,15 @@ from healthbar import Healthbar
 from menu_button import Button
 
 pygame.init()
-screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-pygame.display.set_caption("Placeholder")
+pygame.mixer.pre_init(44100, -16, 2, 512)
+mixer.init()
 
-cavern = pygame.image.load('Assets/Background/Cavern.png').convert_alpha()
-cavern = pygame.transform.scale(cavern, (SCREEN_WIDTH, SCREEN_HEIGHT-BOTTOM_PANEL))
-forest = pygame.image.load('Assets/Background/Dead_Forest.png').convert_alpha()
-forest = pygame.transform.scale(forest, (SCREEN_WIDTH, SCREEN_HEIGHT-BOTTOM_PANEL))
-panel = pygame.image.load('Assets/Background/panel.png').convert_alpha()
-panel = pygame.transform.scale(panel, (SCREEN_WIDTH, BOTTOM_PANEL))
+main_theme = mixer.Sound('Assets/Audio/main_theme.mp3')
+main_theme.set_volume(0.2)
+main_theme.play(-1)
+
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+pygame.display.set_caption("Dungeon Destroyer")
 screen.fill(COLORS['GREY'])
       
 knight = Knight(250, 420, 400) 
@@ -77,6 +78,9 @@ def level_slime():
                 turn.append(turn.pop(0))
                 cooldown = 0
 
+        if knight.alive and not slime.alive:
+            attack_3.unlocked = True
+
         pygame.display.update()
 
 def level_wolf():
@@ -136,11 +140,15 @@ def level_wolf():
                 turn.append(turn.pop(0))
                 cooldown = 0
 
+        if knight.alive and not wolf.alive:
+            attack_2.unlocked = True
+            defend.unlocked = True
+
         pygame.display.update()
 
 def level_demon():
     knight.curr_hp = knight.max_hp
-    demon = Demon(800, 400, 300)
+    demon = Demon(800, 400, 700)
     demon_healthbar = Healthbar((SCREEN_WIDTH//6)*4, SCREEN_HEIGHT-BOTTOM_PANEL+25, demon.max_hp, demon.max_hp)
 
     running = True

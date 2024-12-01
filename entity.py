@@ -64,6 +64,7 @@ class Knight(pygame.sprite.Sprite):
 
     def defend(self): 
         self.curr_frame = 0
+        self.defense= True
         self.action = 'DEFEND'
         self.update_time = pygame.time.get_ticks()
 
@@ -119,9 +120,7 @@ class Demon(pygame.sprite.Sprite):
             target.curr_hp -= damage
         else:
             random_num = random.randint(1, 10)
-            if random_num >= 3:
-                target.curr_hp -= damage//4
-            else:
+            if random_num <= 3:
                 target.curr_hp -= damage
             target.defense = False
         target.curr_frame = 0
@@ -182,9 +181,7 @@ class Slime(pygame.sprite.Sprite):
             target.curr_hp -= damage
         else:
             random_num = random.randint(1, 10)
-            if random_num >= 3:
-                target.curr_hp -= damage//4
-            else:
+            if random_num <= 3:
                 target.curr_hp -= damage
             target.defense = False
         target.curr_frame = 0
@@ -250,9 +247,7 @@ class Wolf(pygame.sprite.Sprite):
             target.curr_hp -= damage
         else:
             random_num = random.randint(1, 10)
-            if random_num >= 3:
-                target.curr_hp -= damage//4
-            else:
+            if random_num <= 3:
                 target.curr_hp -= damage
             target.defense = False
         target.curr_frame = 0

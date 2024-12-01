@@ -18,7 +18,6 @@ attack_3 = Skill_Node('Assets/Misc/Iron Sword.png', (SCREEN_WIDTH//6)+90, 600)
 attack_2 = Skill_Node('Assets/Misc/Wooden Sword.png', (SCREEN_WIDTH//6)+54, 600, defend)
 attack_1 = Skill_Node('Assets/Misc/Knife.png', (SCREEN_WIDTH//6)+10, 600, attack_2, attack_3)
 
-defend.unlocked = True
 attack_1.unlocked = True
 
 def breadth_first_traversal(root, screen):
