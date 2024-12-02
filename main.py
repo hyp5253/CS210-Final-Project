@@ -2,8 +2,8 @@ from pygame import mixer
 from settings import *
 from support import *
 from skills import *
-from entity import Knight, Enemy
-from healthbar import Healthbar
+from entity import Knight, Enemy, Boss
+from bar import Healthbar
 from menu_button import Button
 
 pygame.init()
@@ -19,7 +19,7 @@ pygame.display.set_caption("Dungeon Destroyer")
 screen.fill(COLORS['GREY'])
       
 knight = Knight(250, 420, 400) 
-knight_healthbar = Healthbar((SCREEN_WIDTH//6) + 20, SCREEN_HEIGHT-BOTTOM_PANEL+25, knight.max_hp, knight.max_hp)
+knight_healthbar = Healthbar((SCREEN_WIDTH//6)+20, SCREEN_HEIGHT-BOTTOM_PANEL+25, knight.max_hp, knight.max_hp)
 
 slime_animations = {
             'IDLE' : [animation_parser_r('Assets/Enemies/Slime/IDLE.png', 4, 64, 64, 3), 0],
@@ -32,13 +32,18 @@ demon_animations = {
             'HURT' : [animation_parser('Assets/Enemies/Demon/HURT.png', 4, 81, 71, 2.5), 0],
             'DEATH' : [animation_parser('Assets/Enemies/Demon/DEATH.png', 6, 81, 71, 2.5), 0],
             'ATTACK' : [animation_parser('Assets/Enemies/Demon/ATTACK.png', 8, 81, 71, 2.5), 30],
+            'SPELL 1' : [animation_parser('Assets/Enemies/Demon/SPELL 1-1.png', 6, 32, 32, 3), 30],
         }  
+demon_animations['SPELL 1'][0] += animation_parser('Assets/Enemies/Demon/SPELL 1-2.png', 4, 32, 32, 3)
 wolf_animations = {
            'IDLE' : [animation_parser('Assets/Enemies/Dark Wolf/IDLE.png', 4, 48, 32, 4), 0],
            'ATTACK' : [animation_parser('Assets/Enemies/Dark Wolf/ATTACK 1.png', 4, 48, 32, 4), 40],
            'HURT' : [animation_parser('Assets/Enemies/Dark Wolf/IDLE.png', 4, 48, 32, 4), 0],
            'DEATH' : [animation_parser('Assets/Enemies/Dark Wolf/DEATH.png', 4, 48, 32, 4), 0],
-        }  
+        } 
+wolf_animations['ATTACK'][0] += animation_parser('Assets/Enemies/Dark Wolf/ATTACK 1-2.png', 3, 48, 32, 4)
+wolf_animations['DEATH'][0] += animation_parser('Assets/Enemies/Dark Wolf/DEATH 1-2.png', 4, 48, 32, 4)
+
 
 def level_slime():
     knight.curr_hp = knight.max_hp
@@ -167,7 +172,7 @@ def level_wolf():
 
 def level_demon():
     knight.curr_hp = knight.max_hp
-    demon = Enemy(800, 400, 700, demon_animations)
+    demon = Boss(800, 400, 700, demon_animations)
     demon_healthbar = Healthbar((SCREEN_WIDTH//6)*4, SCREEN_HEIGHT-BOTTOM_PANEL+25, demon.max_hp, demon.max_hp)
 
     running = True
@@ -194,6 +199,7 @@ def level_demon():
 
         knight.update()
         knight.draw_entity(screen)
+
         demon.update()
         demon.draw_entity(screen)
 
@@ -218,7 +224,7 @@ def level_demon():
         elif demon.alive and turn[0] == demon:
             cooldown += 1
             if cooldown >= wait:
-                demon.attack('ATTACK', knight)
+                demon.attack('SPELL 1', knight)
                 turn.append(turn.pop(0))
                 cooldown = 0
 

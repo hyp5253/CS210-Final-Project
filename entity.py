@@ -16,7 +16,7 @@ class Knight(pygame.sprite.Sprite):
             'DEFEND' : [animation_parser('Assets/Player/DEFEND.png', 6, 96, 84, 2.5), 0]
         }
 
-        
+
 
         self.action = 'IDLE'
         self.defense = False
@@ -124,3 +124,86 @@ class Enemy(pygame.sprite.Sprite):
         if target.curr_hp <= 0:
             target.alive = False
             target.action = 'DEATH'
+
+class Boss(pygame.sprite.Sprite):
+    def __init__ (self, x, y, max_hp, animations):
+        pygame.sprite.Sprite().__init__()
+
+        self.animations = animations
+        
+        self.action = 'IDLE'
+
+        self.max_hp = max_hp
+        self.curr_hp = max_hp
+        self.alive = True
+        
+        self.image = self.animations[self.action][0][0]
+        self.rect = self.image.get_rect()
+        self.rect.center = (x, y)
+
+        self.update_time = pygame.time.get_ticks()
+        self.curr_frame = 0
+
+        self.spell = 'SPELL 1'
+        self.cast_spell = False
+
+        self.spell_img = self.animations[self.spell][0][0]
+        self.spell_rect = self.spell_img.get_rect()
+        self.spell_rect.center = (255, 440)
+        self.spell_frame = 0
+
+    def update(self):
+        cooldown = 100
+        self.image = self.animations[self.action][0][self.curr_frame]
+        self.spell_img = self.animations[self.spell][0][self.spell_frame]
+
+        if pygame.time.get_ticks() - self.update_time > cooldown:
+            self.update_time = pygame.time.get_ticks()
+            self.curr_frame += 1
+
+            if self.cast_spell is True:
+                self.spell_frame += 1
+            
+
+        if self.curr_frame >= len(self.animations[self.action][0]):
+            if self.action is not 'DEATH':
+                self.curr_frame = 0
+                self.update_time = pygame.time.get_ticks()
+                self.action = 'IDLE'
+
+                self.spell_frame = 0
+                self.cast_spell = False
+            else:
+                self.curr_frame = len(self.animations['DEATH'][0]) - 1
+                
+    def draw_entity(self, screen): 
+        screen.blit(self.image, self.rect)
+        screen.blit(self.spell_img, self.spell_rect)
+
+    def attack (self, action, target):
+        if action == 'SPELL 1':
+            self.action = 'IDLE'
+            self.spell = 'SPELL 1'
+            self.cast_spell = True
+        else:
+            self.action = action
+
+        self.curr_frame = 0
+        self.spell_frame = 0
+        self.update_time = pygame.time.get_ticks()
+
+        damage = self.animations[action][1]
+        if not target.defense:
+            target.curr_hp -= damage
+        else:
+            random_num = random.randint(1, 10)
+            if random_num <= 3:
+                target.curr_hp -= damage
+            target.defense = False
+
+        target.curr_frame = 0
+        target.action = 'HURT'
+        if target.curr_hp <= 0:
+            target.alive = False
+            target.action = 'DEATH'
+
