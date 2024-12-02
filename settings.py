@@ -24,3 +24,5 @@ forest = pygame.image.load('Assets/Background/Dead_Forest.png')
 forest = pygame.transform.scale(forest, (SCREEN_WIDTH, SCREEN_HEIGHT-BOTTOM_PANEL))
 panel = pygame.image.load('Assets/Background/panel.png')
 panel = pygame.transform.scale(panel, (SCREEN_WIDTH, BOTTOM_PANEL))
+
+
