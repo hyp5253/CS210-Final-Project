@@ -16,6 +16,7 @@ class Knight(pygame.sprite.Sprite):
             'DEFEND' : [animation_parser('Assets/Player/DEFEND.png', 6, 96, 84, 2.5), 0]
         }
 
+        
 
         self.action = 'IDLE'
         self.defense = False

@@ -19,7 +19,7 @@ pygame.display.set_caption("Dungeon Destroyer")
 screen.fill(COLORS['GREY'])
       
 knight = Knight(250, 420, 400) 
-knight_healthbar = Healthbar(SCREEN_WIDTH//6, SCREEN_HEIGHT-BOTTOM_PANEL+25, knight.max_hp, knight.max_hp)
+knight_healthbar = Healthbar((SCREEN_WIDTH//6) + 20, SCREEN_HEIGHT-BOTTOM_PANEL+25, knight.max_hp, knight.max_hp)
 
 slime_animations = {
             'IDLE' : [animation_parser_r('Assets/Enemies/Slime/IDLE.png', 4, 64, 64, 3), 0],
