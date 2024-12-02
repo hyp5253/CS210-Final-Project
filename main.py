@@ -12,7 +12,7 @@ mixer.init()
 
 main_theme = mixer.Sound('Assets/Audio/main_theme.mp3')
 main_theme.set_volume(0.2)
-main_theme.play(-1)
+# main_theme.play(-1)
 
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Dungeon Destroyer")
@@ -55,19 +55,19 @@ def level_slime():
 
 
         if knight.alive and turn[0] is knight: 
-            if attack_1.rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_just_pressed()[0] and attack_1.unlocked:
+            if attack_1.rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_just_pressed()[0]:
                 knight.attack('ATTACK 1', slime)
                 turn.append(turn.pop(0))
             
-            if attack_2.rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_just_pressed()[0] and attack_2.unlocked:
+            if attack_2.rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_just_pressed()[0]:
                 knight.attack('ATTACK 2', slime)
                 turn.append(turn.pop(0))
 
-            if attack_3.rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_just_pressed()[0] and attack_3.unlocked:
+            if attack_3.rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_just_pressed()[0]:
                 knight.attack('ATTACK 3', slime)
                 turn.append(turn.pop(0))
 
-            if defend.rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_just_pressed()[0] and defend.unlocked:
+            if defend.rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_just_pressed()[0]:
                 knight.defend()
                 turn.append(turn.pop(0))
 
@@ -117,19 +117,19 @@ def level_wolf():
 
 
         if knight.alive and turn[0] is knight: 
-            if attack_1.rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_just_pressed()[0] and attack_1.unlocked:
+            if attack_1.rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_just_pressed()[0]:
                 knight.attack('ATTACK 1', wolf)
                 turn.append(turn.pop(0))
             
-            if attack_2.rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_just_pressed()[0] and attack_2.unlocked:
+            if attack_2.rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_just_pressed()[0]:
                 knight.attack('ATTACK 2', wolf)
                 turn.append(turn.pop(0))
 
-            if attack_3.rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_just_pressed()[0] and attack_3.unlocked:
+            if attack_3.rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_just_pressed()[0]:
                 knight.attack('ATTACK 3', wolf)
                 turn.append(turn.pop(0))
 
-            if defend.rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_just_pressed()[0] and defend.unlocked:
+            if defend.rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_just_pressed()[0]:
                 knight.defend()
                 turn.append(turn.pop(0))
 
@@ -180,19 +180,19 @@ def level_demon():
 
 
         if knight.alive and turn[0] is knight: 
-            if attack_1.rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_just_pressed()[0] and attack_1.unlocked:
+            if attack_1.rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_just_pressed()[0]:
                 knight.attack('ATTACK 1', demon)
                 turn.append(turn.pop(0))
             
-            if attack_2.rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_just_pressed()[0] and attack_2.unlocked:
+            if attack_2.rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_just_pressed()[0]:
                 knight.attack('ATTACK 2', demon)
                 turn.append(turn.pop(0))
 
-            if attack_3.rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_just_pressed()[0] and attack_3.unlocked:
+            if attack_3.rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_just_pressed()[0]:
                 knight.attack('ATTACK 3', demon)
                 turn.append(turn.pop(0))
 
-            if defend.rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_just_pressed()[0] and defend.unlocked:
+            if defend.rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_just_pressed()[0]:
                 knight.defend()
                 turn.append(turn.pop(0))
 
