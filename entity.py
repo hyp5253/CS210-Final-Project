@@ -3,7 +3,7 @@ import random
 from support import animation_parser
 
 class Knight(pygame.sprite.Sprite):
-    def __init__ (self, x, y, max_hp):
+    def __init__ (self, x, y, max_hp, max_armor):
         pygame.sprite.Sprite().__init__()
 
         self.animations = {
@@ -16,10 +16,10 @@ class Knight(pygame.sprite.Sprite):
             'DEFEND' : [animation_parser('Assets/Player/DEFEND.png', 6, 96, 84, 2.5), 0]
         }
 
-
-
         self.action = 'IDLE'
         self.defense = False
+        self.curr_armor = max_armor
+        self.max_armor = max_armor
 
         self.max_hp = max_hp
         self.curr_hp = max_hp
@@ -133,6 +133,8 @@ class Boss(pygame.sprite.Sprite):
         
         self.action = 'IDLE'
 
+        self.attacks_list = ['SPELL 1', 'ATTACK']
+
         self.max_hp = max_hp
         self.curr_hp = max_hp
         self.alive = True
@@ -194,7 +196,10 @@ class Boss(pygame.sprite.Sprite):
 
         damage = self.animations[action][1]
         if not target.defense:
-            target.curr_hp -= damage
+            if target.curr_armor > 0 and action != 'SPELL 1':
+                target.curr_armor -= damage
+            else:
+                target.curr_hp -= damage
         else:
             random_num = random.randint(1, 10)
             if random_num <= 3:
