@@ -10,14 +10,13 @@ class Skill_Node():
         self.rect = self.image.get_rect()
         self.rect.center = (x, y)
 
-        self.unlocked = True
+        self.unlocked = False
         self.left = left
         self.right = right
 
     def draw_skill(self, screen): 
         screen.blit(self.icon, self.icon_rect)
         screen.blit(self.image, self.rect) 
-
 
 defend   = Skill_Node('Assets/Misc/Iron Shield.png', (SCREEN_WIDTH//6)+210, 600)
 attack_3 = Skill_Node('Assets/Misc/Iron Sword.png', (SCREEN_WIDTH//6)+140, 600)

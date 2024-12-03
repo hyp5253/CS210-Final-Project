@@ -13,7 +13,10 @@ mixer.init()
 
 main_theme = mixer.Sound('Assets/Audio/main_theme.mp3')
 main_theme.set_volume(0.2)
-# main_theme.play(-1)
+main_theme.play(-1)
+
+boss_theme = mixer.Sound('Assets/Audio/boss_theme.mp3')
+boss_theme.set_volume(0.1)
 
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Dungeon Destroyer")
@@ -177,6 +180,9 @@ def level_wolf():
         pygame.display.update()
 
 def level_demon():
+    main_theme.fadeout(500)
+    boss_theme.play(-1)
+
     knight.curr_hp = knight.max_hp
     knight.curr_armor = knight.max_armor
 
@@ -194,6 +200,8 @@ def level_demon():
             if event.type == pygame.QUIT:
                 pygame.quit()
             if event.type == pygame.KEYDOWN and pygame.key.get_pressed()[pygame.K_ESCAPE]:
+                boss_theme.fadeout(500)
+                main_theme.play(-1)
                 running = False
 
         screen.fill(COLORS['GREY'])
