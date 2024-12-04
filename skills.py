@@ -1,4 +1,5 @@
 from settings import *
+from entity import Knight
 
 class Skill_Node():
     def __init__(self, path, x, y, left=None, right=None):
@@ -10,7 +11,7 @@ class Skill_Node():
         self.rect = self.image.get_rect()
         self.rect.center = (x, y)
 
-        self.unlocked = False
+        self.equipped = False
         self.left = left
         self.right = right
 
@@ -18,12 +19,14 @@ class Skill_Node():
         screen.blit(self.icon, self.icon_rect)
         screen.blit(self.image, self.rect) 
 
-defend   = Skill_Node('Assets/Misc/Iron Shield.png', (SCREEN_WIDTH//6)+210, 600)
-attack_3 = Skill_Node('Assets/Misc/Iron Sword.png', (SCREEN_WIDTH//6)+140, 600)
-attack_2 = Skill_Node('Assets/Misc/Wooden Sword.png', (SCREEN_WIDTH//6)+70, 600, defend)
-attack_1 = Skill_Node('Assets/Misc/Knife.png', (SCREEN_WIDTH//6), 600, attack_2, attack_3)
+iron_shield   = Skill_Node('Assets/Misc/Iron Shield.png', (SCREEN_WIDTH//6)+70, 600)
+wooden_shield   = Skill_Node('Assets/Misc/Wooden Shield.png', (SCREEN_WIDTH//6)+70, 600, iron_shield)
+iron_sword = Skill_Node('Assets/Misc/Iron Sword.png', (SCREEN_WIDTH//6), 600)
+wooden_sword = Skill_Node('Assets/Misc/Wooden Sword.png', (SCREEN_WIDTH//6), 600, iron_sword)
+knife = Skill_Node('Assets/Misc/Knife.png', (SCREEN_WIDTH//6), 600, wooden_sword, wooden_shield)
 
-attack_1.unlocked = True
+wooden_shield.equipped = True
+knife.equipped = True
 
 def breadth_first_traversal(root, screen):
    if not root: return root
@@ -31,7 +34,7 @@ def breadth_first_traversal(root, screen):
    queue = [root]
    while len(queue) > 0:
       curr = queue.pop(0)
-      if curr.unlocked: curr.draw_skill(screen)
+      if curr.equipped: curr.draw_skill(screen)
       
       if curr.left: queue.append(curr.left)
       if curr.right: queue.append(curr.right)
