@@ -6,7 +6,7 @@ from upgrades import *
 from entity import Knight, Enemy, Boss
 from bar import Healthbar, Armor
 from menu_button import Button
-from random import choice
+from random import choice, randint
 
 pygame.init()
 pygame.mixer.pre_init(44100, -16, 2, 512)
@@ -83,6 +83,7 @@ def level_wolf():
         wolf_healthbar.draw_bar(wolf.curr_hp, screen)
 
         breadth_first_traversal(knife, screen)
+        heal.draw_skill(screen)
 
         knight.update()
         knight.draw_entity(screen)
@@ -98,10 +99,19 @@ def level_wolf():
                 else:                                   knight.attack('ATTACK 3', wolf)
 
                 turn.append(turn.pop(0))
-            
 
             if wooden_shield.rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_just_pressed()[0]:
                 knight.defend()
+                turn.append(turn.pop(0))
+
+            if heal.rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_just_pressed()[0] and knight.curr_hp < knight.max_hp:
+                factor = randint(1,5)
+                heal_amount = factor*10
+                if knight.curr_hp + heal_amount <= knight.max_hp:
+                    knight.curr_hp += heal_amount
+                else:
+                    knight.curr_hp = knight.max_hp
+
                 turn.append(turn.pop(0))
 
         elif wolf.alive and turn[0] == wolf:
@@ -142,6 +152,7 @@ def level_slime():
         slime_healthbar.draw_bar(slime.curr_hp, screen)
 
         breadth_first_traversal(knife, screen)
+        heal.draw_skill(screen)
 
         knight.update()
         knight.draw_entity(screen)
@@ -161,6 +172,16 @@ def level_slime():
 
             if wooden_shield.rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_just_pressed()[0]:
                 knight.defend()
+                turn.append(turn.pop(0))
+
+            if heal.rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_just_pressed()[0] and knight.curr_hp < knight.max_hp:
+                factor = randint(1,5)
+                heal_amount = factor*10
+                if knight.curr_hp + heal_amount <= knight.max_hp:
+                    knight.curr_hp += heal_amount
+                else:
+                    knight.curr_hp = knight.max_hp
+
                 turn.append(turn.pop(0))
 
         elif slime.alive and turn[0] == slime:
@@ -207,6 +228,7 @@ def level_demon():
         demon_healthbar.draw_bar(demon.curr_hp, screen)
 
         breadth_first_traversal(knife, screen)
+        heal.draw_skill(screen)
 
         knight.update()
         knight.draw_entity(screen)
@@ -226,6 +248,16 @@ def level_demon():
 
             if wooden_shield.rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_just_pressed()[0]:
                 knight.defend()
+                turn.append(turn.pop(0))
+
+            if heal.rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_just_pressed()[0] and knight.curr_hp < knight.max_hp:
+                factor = randint(1,5)
+                heal_amount = factor*10
+                if knight.curr_hp + heal_amount <= knight.max_hp:
+                    knight.curr_hp += heal_amount
+                else:
+                    knight.curr_hp = knight.max_hp
+
                 turn.append(turn.pop(0))
 
         elif demon.alive and turn[0] == demon:

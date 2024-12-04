@@ -19,11 +19,13 @@ class Skill_Node():
         screen.blit(self.icon, self.icon_rect)
         screen.blit(self.image, self.rect) 
 
-iron_shield   = Skill_Node('Assets/Misc/Iron Shield.png', (SCREEN_WIDTH//6)+70, 600)
-wooden_shield   = Skill_Node('Assets/Misc/Wooden Shield.png', (SCREEN_WIDTH//6)+70, 600, iron_shield)
-iron_sword = Skill_Node('Assets/Misc/Iron Sword.png', (SCREEN_WIDTH//6), 600)
-wooden_sword = Skill_Node('Assets/Misc/Wooden Sword.png', (SCREEN_WIDTH//6), 600, iron_sword)
-knife = Skill_Node('Assets/Misc/Knife.png', (SCREEN_WIDTH//6), 600, wooden_sword, wooden_shield)
+iron_shield   = Skill_Node('Assets/Misc/Iron Shield.png', (SCREEN_WIDTH//6)+100, 600)
+wooden_shield   = Skill_Node('Assets/Misc/Wooden Shield.png', (SCREEN_WIDTH//6)+100, 600, iron_shield)
+iron_sword = Skill_Node('Assets/Misc/Iron Sword.png', (SCREEN_WIDTH//6)+30, 600)
+wooden_sword = Skill_Node('Assets/Misc/Wooden Sword.png', (SCREEN_WIDTH//6)+30, 600, iron_sword)
+knife = Skill_Node('Assets/Misc/Knife.png', (SCREEN_WIDTH//6)+30, 600, wooden_sword, wooden_shield)
+heal = Skill_Node('Assets/Misc/Heart.png', (SCREEN_WIDTH//6)+170, 600)
+
 
 wooden_shield.equipped = True
 knife.equipped = True
