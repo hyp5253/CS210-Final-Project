@@ -32,6 +32,12 @@ class Knight(pygame.sprite.Sprite):
         self.update_time = pygame.time.get_ticks()
         self.curr_frame = 0
 
+        self.progress = {
+            'wolf' : False,
+            'slime' : False,
+            'demon' : False
+        }
+
     def update(self):
         cooldown = 100
         self.image = self.animations[self.action][0][self.curr_frame]

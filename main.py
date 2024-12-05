@@ -3,6 +3,7 @@ from settings import *
 from support import *
 from skills import *
 from upgrades import *
+from map_graph import *
 from entity import Knight, Enemy, Boss
 from bar import Healthbar, Armor
 from menu_button import Button
@@ -27,15 +28,11 @@ knight = Knight(250, 420, 400, 50)
 knight_healthbar = Healthbar((SCREEN_WIDTH//6)+20, SCREEN_HEIGHT-BOTTOM_PANEL+25, knight.max_hp, knight.max_hp)
 knight_armor = Armor((SCREEN_WIDTH//6)+20, SCREEN_HEIGHT-BOTTOM_PANEL+160, knight.max_armor, knight.max_armor)
 
-graph = {'wolf' : ['slime'],
-         'slime' : ['wolf', 'demon'],
-         'demon' : ['slime']}
-
 slime_animations = {
-            'IDLE' : [animation_parser_r('Assets/Enemies/Slime/IDLE.png', 4, 64, 64, 3), 0],
-            'ATTACK' : [animation_parser_r('Assets/Enemies/Slime/ATTACK.png', 4, 64, 64, 3), 35],
-            'HURT' : [animation_parser_r('Assets/Enemies/Slime/HURT.png', 4, 64, 64, 3), 0],
-            'DEATH' : [animation_parser_r('Assets/Enemies/Slime/DEATH.png', 4, 64, 64, 3), 0],
+            'IDLE' : [animation_parser_r('Assets/Enemies/Slime/IDLE.png', 4, 64, 64, 4), 0],
+            'ATTACK' : [animation_parser_r('Assets/Enemies/Slime/ATTACK.png', 4, 64, 64, 4), 35],
+            'HURT' : [animation_parser_r('Assets/Enemies/Slime/HURT.png', 4, 64, 64, 4), 0],
+            'DEATH' : [animation_parser_r('Assets/Enemies/Slime/DEATH.png', 4, 64, 64, 4), 0],
         }  
 demon_animations = {
             'IDLE' : [animation_parser('Assets/Enemies/Demon/IDLE.png', 4, 81, 71, 2.5), 0],
@@ -55,6 +52,7 @@ wolf_animations['ATTACK'][0] += animation_parser('Assets/Enemies/Dark Wolf/ATTAC
 wolf_animations['DEATH'][0] += animation_parser('Assets/Enemies/Dark Wolf/DEATH 1-2.png', 4, 48, 32, 4)
 
 def level_wolf():
+    knight.action = 'IDLE'
     knight.curr_hp = knight.max_hp
     knight.curr_armor = knight.max_armor
 
@@ -121,13 +119,16 @@ def level_wolf():
                 turn.append(turn.pop(0))
                 cooldown = 0
 
+        if knight.alive and not wolf.alive: knight.progress['wolf'] = True
+
         pygame.display.update()
 
 def level_slime():
+    knight.action = 'IDLE'
     knight.curr_hp = knight.max_hp
     knight.curr_armor = knight.max_armor
 
-    slime = Enemy(780, 430, 400, slime_animations)
+    slime = Enemy(780, 410, 400, slime_animations)
     slime_healthbar = Healthbar((SCREEN_WIDTH//6)*4, SCREEN_HEIGHT-BOTTOM_PANEL+25, slime.max_hp, slime.max_hp)
 
     running = True
@@ -191,6 +192,7 @@ def level_slime():
                 turn.append(turn.pop(0))
                 cooldown = 0
 
+        if knight.alive and not slime.alive: knight.progress['slime'] = True
 
         pygame.display.update()
 
@@ -198,10 +200,11 @@ def level_demon():
     # main_theme.fadeout(500)
     # boss_theme.play(-1)
 
+    knight.action = 'IDLE'
     knight.curr_hp = knight.max_hp
     knight.curr_armor = knight.max_armor
 
-    demon = Boss(800, 400, 700, demon_animations)
+    demon = Boss(800, 300, 700, demon_animations)
     demon_healthbar = Healthbar((SCREEN_WIDTH//6)*4, SCREEN_HEIGHT-BOTTOM_PANEL+25, demon.max_hp, demon.max_hp)
 
     running = True
@@ -268,6 +271,8 @@ def level_demon():
                 turn.append(turn.pop(0))
                 cooldown = 0
 
+        if knight.alive and not demon.alive: knight.progress['demon'] = True
+
         pygame.display.update()
 
 def map():
@@ -298,6 +303,13 @@ def map():
                 pygame.quit()
             if event.type == pygame.KEYDOWN and pygame.key.get_pressed()[pygame.K_ESCAPE]:
                 running = False
+
+        for level in knight.progress:
+            if knight.progress[level] is True:
+                edges = get_edges(level)
+                for edge in edges:
+                    draw_edge(screen, edge)
+               
 
         screen.blit(slime_img, slime_rect)
         screen.blit(wolf_img, wolf_rect)
@@ -335,7 +347,6 @@ def skills_menu():
                 curr_shield[0][2].equipped = False
                 curr_shield[0] = shield_upgrades.pop(0)
                 curr_shield[0][2].equipped = True
-                knight.max_armor += 100  
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
