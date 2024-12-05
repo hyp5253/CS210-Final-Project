@@ -75,6 +75,12 @@ class Knight(pygame.sprite.Sprite):
         self.action = 'DEFEND'
         self.update_time = pygame.time.get_ticks()
 
+    def reset_stats(self):
+        self.curr_frame = 0
+        self.action = 'IDLE'
+        self.curr_hp = self.max_hp
+        self.curr_armor = self.max_armor
+
 class Enemy(pygame.sprite.Sprite):
     def __init__ (self, x, y, max_hp, animations):
         pygame.sprite.Sprite().__init__()

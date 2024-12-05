@@ -25,7 +25,3 @@ def draw_edge(screen, edge):
     
     
 
-if __name__ == "__main__":
-    
-    print(get_edges('wolf'))
-

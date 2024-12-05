@@ -15,7 +15,7 @@ mixer.init()
 
 main_theme = mixer.Sound('Assets/Audio/main_theme.mp3')
 main_theme.set_volume(0.2)
-# main_theme.play(-1)
+main_theme.play(-1)
 
 boss_theme = mixer.Sound('Assets/Audio/boss_theme.mp3')
 boss_theme.set_volume(0.1)
@@ -30,7 +30,7 @@ knight_armor = Armor((SCREEN_WIDTH//6)+20, SCREEN_HEIGHT-BOTTOM_PANEL+160, knigh
 
 slime_animations = {
             'IDLE' : [animation_parser_r('Assets/Enemies/Slime/IDLE.png', 4, 64, 64, 4), 0],
-            'ATTACK' : [animation_parser_r('Assets/Enemies/Slime/ATTACK.png', 4, 64, 64, 4), 35],
+            'ATTACK' : [animation_parser_r('Assets/Enemies/Slime/ATTACK.png', 4, 64, 64, 4), 50],
             'HURT' : [animation_parser_r('Assets/Enemies/Slime/HURT.png', 4, 64, 64, 4), 0],
             'DEATH' : [animation_parser_r('Assets/Enemies/Slime/DEATH.png', 4, 64, 64, 4), 0],
         }  
@@ -52,9 +52,7 @@ wolf_animations['ATTACK'][0] += animation_parser('Assets/Enemies/Dark Wolf/ATTAC
 wolf_animations['DEATH'][0] += animation_parser('Assets/Enemies/Dark Wolf/DEATH 1-2.png', 4, 48, 32, 4)
 
 def level_wolf():
-    knight.action = 'IDLE'
-    knight.curr_hp = knight.max_hp
-    knight.curr_armor = knight.max_armor
+    knight.reset_stats()
 
     wolf = Enemy(780, 400, 300, wolf_animations)
     wolf_healthbar = Healthbar((SCREEN_WIDTH//6)*4, SCREEN_HEIGHT-BOTTOM_PANEL+25, wolf.max_hp, wolf.max_hp)
@@ -124,9 +122,7 @@ def level_wolf():
         pygame.display.update()
 
 def level_slime():
-    knight.action = 'IDLE'
-    knight.curr_hp = knight.max_hp
-    knight.curr_armor = knight.max_armor
+    knight.reset_stats()
 
     slime = Enemy(780, 410, 400, slime_animations)
     slime_healthbar = Healthbar((SCREEN_WIDTH//6)*4, SCREEN_HEIGHT-BOTTOM_PANEL+25, slime.max_hp, slime.max_hp)
@@ -197,12 +193,10 @@ def level_slime():
         pygame.display.update()
 
 def level_demon():
-    # main_theme.fadeout(500)
-    # boss_theme.play(-1)
+    main_theme.fadeout(500)
+    boss_theme.play(-1)
 
-    knight.action = 'IDLE'
-    knight.curr_hp = knight.max_hp
-    knight.curr_armor = knight.max_armor
+    knight.reset_stats()
 
     demon = Boss(800, 300, 700, demon_animations)
     demon_healthbar = Healthbar((SCREEN_WIDTH//6)*4, SCREEN_HEIGHT-BOTTOM_PANEL+25, demon.max_hp, demon.max_hp)
@@ -218,8 +212,8 @@ def level_demon():
             if event.type == pygame.QUIT:
                 pygame.quit()
             if event.type == pygame.KEYDOWN and pygame.key.get_pressed()[pygame.K_ESCAPE]:
-                # boss_theme.fadeout(500)
-                # main_theme.play(-1)
+                boss_theme.fadeout(500)
+                main_theme.play(-1)
                 running = False
 
         screen.fill(COLORS['GREY'])
