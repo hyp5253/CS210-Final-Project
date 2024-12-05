@@ -34,6 +34,7 @@ slime_animations = {
             'HURT' : [animation_parser_r('Assets/Enemies/Slime/HURT.png', 4, 64, 64, 4), 0],
             'DEATH' : [animation_parser_r('Assets/Enemies/Slime/DEATH.png', 4, 64, 64, 4), 0],
         }  
+
 demon_animations = {
             'IDLE' : [animation_parser('Assets/Enemies/Demon/IDLE.png', 4, 81, 71, 2.5), 0],
             'HURT' : [animation_parser('Assets/Enemies/Demon/HURT.png', 4, 81, 71, 2.5), 0],
@@ -42,6 +43,7 @@ demon_animations = {
             'SPELL 1' : [animation_parser('Assets/Enemies/Demon/SPELL 1-1.png', 6, 32, 32, 3), 45],
         }  
 demon_animations['SPELL 1'][0] += animation_parser('Assets/Enemies/Demon/SPELL 1-2.png', 4, 32, 32, 3)
+
 wolf_animations = {
            'IDLE' : [animation_parser('Assets/Enemies/Dark Wolf/IDLE.png', 4, 48, 32, 4), 0],
            'ATTACK' : [animation_parser('Assets/Enemies/Dark Wolf/ATTACK 1.png', 4, 48, 32, 4), 40],
@@ -50,3 +52,10 @@ wolf_animations = {
         } 
 wolf_animations['ATTACK'][0] += animation_parser('Assets/Enemies/Dark Wolf/ATTACK 1-2.png', 3, 48, 32, 4)
 wolf_animations['DEATH'][0] += animation_parser('Assets/Enemies/Dark Wolf/DEATH 1-2.png', 4, 48, 32, 4)
+
+cavern = pygame.image.load('Assets/Background/Cavern.png')
+cavern = pygame.transform.scale(cavern, (SCREEN_WIDTH, SCREEN_HEIGHT-BOTTOM_PANEL))
+forest = pygame.image.load('Assets/Background/Dead_Forest.png')
+forest = pygame.transform.scale(forest, (SCREEN_WIDTH, SCREEN_HEIGHT-BOTTOM_PANEL))
+panel = pygame.image.load('Assets/Background/panel.png')
+panel = pygame.transform.scale(panel, (SCREEN_WIDTH, BOTTOM_PANEL))
