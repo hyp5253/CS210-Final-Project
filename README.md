@@ -4,6 +4,7 @@ This is a TRPG style game created using the Python library `Pygame-ce`.
 ---
 
 ## Game Lore
+
 In progress...
 ---
 
