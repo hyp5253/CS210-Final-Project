@@ -32,10 +32,13 @@ class Knight(pygame.sprite.Sprite):
         self.update_time = pygame.time.get_ticks()
         self.curr_frame = 0
 
+        self.funds = 0
+
         self.progress = {
             'wolf' : False,
             'slime' : False,
-            'demon' : False
+            'demon' : False,
+            'golem' : False
         }
 
     def update(self):
@@ -62,7 +65,10 @@ class Knight(pygame.sprite.Sprite):
         self.update_time = pygame.time.get_ticks()
 
         damage = self.animations[action][1]
-        target.curr_hp -= damage
+        if target.curr_armor > 0:
+            target.curr_armor -= damage
+        else:
+            target.curr_hp -= damage
         target.curr_frame = 0
         target.action = 'HURT'
         if target.curr_hp <= 0:
@@ -82,12 +88,14 @@ class Knight(pygame.sprite.Sprite):
         self.curr_armor = self.max_armor
 
 class Enemy(pygame.sprite.Sprite):
-    def __init__ (self, x, y, max_hp, animations):
+    def __init__ (self, x, y, max_hp, max_armor, animations):
         pygame.sprite.Sprite().__init__()
 
         self.animations = animations
         
         self.action = 'IDLE'
+        self.curr_armor = max_armor
+        self.max_armor = max_armor
 
         self.max_hp = max_hp
         self.curr_hp = max_hp
@@ -137,13 +145,103 @@ class Enemy(pygame.sprite.Sprite):
             target.alive = False
             target.action = 'DEATH'
 
-class Boss(pygame.sprite.Sprite):
-    def __init__ (self, x, y, max_hp, animations):
+class Miniboss(pygame.sprite.Sprite):
+    def __init__ (self, x, y, max_hp, max_armor, animations):
         pygame.sprite.Sprite().__init__()
 
         self.animations = animations
         
         self.action = 'IDLE'
+        self.curr_armor = max_armor
+        self.max_armor = max_armor
+
+        self.attacks_list = ['ATTACK 1', 'ATTACK 2', 'ATTACK 3']
+
+        self.max_hp = max_hp
+        self.curr_hp = max_hp
+        self.alive = True
+        
+        self.image = self.animations[self.action][0][0]
+        self.rect = self.image.get_rect()
+        self.rect.center = (x, y)
+
+        self.update_time = pygame.time.get_ticks()
+        self.curr_frame = 0
+
+        self.fx = 'FX 1'
+        self.attack_fx = True
+
+        self.fx_img = self.animations[self.fx][0][0]
+        self.fx_rect = self.fx_img.get_rect()
+        self.fx_rect.center = (255, 440)
+        self.fx_frame = 0
+
+    def update(self):
+        cooldown = 100
+        self.image = self.animations[self.action][0][self.curr_frame]
+        self.fx_img = self.animations[self.fx][0][self.fx_frame]
+
+        if pygame.time.get_ticks() - self.update_time > cooldown:
+            self.update_time = pygame.time.get_ticks()
+            self.curr_frame += 1
+
+            if self.attack_fx is True and self.fx_frame < len(self.animations[self.fx][0])-1:
+                self.fx_frame += 1
+            
+
+        if self.curr_frame >= len(self.animations[self.action][0]):
+            if self.action is not 'DEATH':
+                self.curr_frame = 0
+                self.update_time = pygame.time.get_ticks()
+                self.action = 'IDLE'
+
+                self.fx_frame = 0
+                self.attack_fx = False
+            else:
+                self.curr_frame = len(self.animations['DEATH'][0]) - 1
+                
+    def draw_entity(self, screen): 
+        screen.blit(self.image, self.rect)
+        screen.blit(self.fx_img, self.fx_rect)
+
+    def attack (self, action, target): 
+        if action == 'ATTACK 1':
+            self.action = action
+            self.fx = 'FX 1'
+            self.attack_fx = True
+        else:
+            self.action = action
+
+        self.curr_frame = 0
+        self.fx_frame = 0
+        self.update_time = pygame.time.get_ticks()
+
+        damage = self.animations[action][1]
+        if target.curr_armor > 0:
+            target.curr_armor -= damage
+        elif not target.defense:
+            target.curr_hp -= damage
+        else:
+            random_num = random.randint(1, 10)
+            if random_num <= 3:
+                target.curr_hp -= damage
+            target.defense = False
+
+        target.curr_frame = 0
+        target.action = 'HURT'
+        if target.curr_hp <= 0:
+            target.alive = False
+            target.action = 'DEATH'
+
+class Boss(pygame.sprite.Sprite):
+    def __init__ (self, x, y, max_hp, max_armor, animations):
+        pygame.sprite.Sprite().__init__()
+
+        self.animations = animations
+        
+        self.action = 'IDLE'
+        self.curr_armor = max_armor
+        self.max_armor = max_armor
 
         self.attacks_list = ['SPELL 1', 'ATTACK']
 

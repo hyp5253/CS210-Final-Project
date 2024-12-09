@@ -44,6 +44,9 @@ shield_up1 = pygame.transform.scale(shield_up1, (32*3, 32*3))
 curr_shield = [(shield, shield_rect, wooden_shield)]
 shield_upgrades = [(shield_up1, shield_rect, iron_shield)]
 
+def draw_text(screen, text, x, y):
+    img = BUTTON_FONT.render(text, False, 'white')
+    screen.blit(img, (x, y))
 
 def draw_upgrades_menu(screen):
     screen.blit(character_img_static, character_rect)
@@ -51,3 +54,5 @@ def draw_upgrades_menu(screen):
     screen.blit(icon2, icon2_rect)
     screen.blit(curr_weapon[0][0], curr_weapon[0][1])
     screen.blit(curr_shield[0][0], curr_shield[0][1])
+
+    

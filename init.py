@@ -4,7 +4,7 @@ from support import *
 from skills import *
 from upgrades import *
 from map_graph import *
-from entity import Knight, Enemy, Boss
+from entity import Knight, Enemy, Boss, Miniboss
 from bar import Healthbar, Armor
 from menu_button import Button
 from random import choice, randint
@@ -27,6 +27,25 @@ screen.fill(COLORS['GREY'])
 knight = Knight(250, 420, 400, 50) 
 knight_healthbar = Healthbar((SCREEN_WIDTH//6)+20, SCREEN_HEIGHT-BOTTOM_PANEL+25, knight.max_hp, knight.max_hp)
 knight_armor = Armor((SCREEN_WIDTH//6)+20, SCREEN_HEIGHT-BOTTOM_PANEL+160, knight.max_armor, knight.max_armor)
+
+golem_animations = { 'IDLE' : [animation_parser_r('Assets/Enemies/Golem/IDLE.png', 4, 64, 64, 4), 0],
+                     'ATTACK 1' : [animation_parser_r('Assets/Enemies/Golem/ATTACK 1-1.png', 4, 64, 64, 4), 40],
+                     'ATTACK 2' : [animation_parser_r('Assets/Enemies/Golem/ATTACK 2-1.png', 4, 64, 64, 4), 40],
+                     'ATTACK 3' : [animation_parser_r('Assets/Enemies/Golem/ATTACK 3-1.png', 4, 64, 64, 4), 40],
+                     'HURT' : [animation_parser_r('Assets/Enemies/Golem/HURT-1.png', 4, 64, 64, 4), 0],
+                     'FX 1' : [animation_parser_r('Assets/Enemies/Golem/FX 1-1.png', 3, 64, 64, 4), 0],
+                     'FX 2' : [animation_parser_r('Assets/Enemies/Golem/FX 2-1.png', 3, 64, 64, 2), 0],
+
+
+}
+golem_animations['ATTACK 1'][0] += animation_parser_r('Assets/Enemies/Golem/ATTACK 1-2.png', 4, 64, 64, 4)
+golem_animations['ATTACK 1'][0] += animation_parser_r('Assets/Enemies/Golem/ATTACK 1-3.png', 3, 64, 64, 4)
+golem_animations['ATTACK 2'][0] += animation_parser_r('Assets/Enemies/Golem/ATTACK 2-2.png', 4, 64, 64, 4)
+golem_animations['ATTACK 3'][0] += animation_parser_r('Assets/Enemies/Golem/ATTACK 3-2.png', 4, 64, 64, 4)
+golem_animations['ATTACK 3'][0] += animation_parser_r('Assets/Enemies/Golem/ATTACK 3-3.png', 2, 64, 64, 4)
+golem_animations['HURT'][0] += animation_parser_r('Assets/Enemies/Golem/HURT-2.png', 1, 64, 64, 4)
+golem_animations['FX 1'][0] += animation_parser_r('Assets/Enemies/Golem/FX 1-2.png', 3, 64, 64, 4)
+golem_animations['FX 1'][0] += animation_parser_r('Assets/Enemies/Golem/FX 1-3.png', 3, 64, 64, 4)
 
 slime_animations = {
             'IDLE' : [animation_parser_r('Assets/Enemies/Slime/IDLE.png', 4, 64, 64, 4), 0],
