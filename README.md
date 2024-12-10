@@ -1,5 +1,4 @@
 # Dungeon Destroyer (Python Project)
-![alt text](image.png)
 This is a TRPG style game created using the Python library `Pygame-ce`. 
 
 ---
