@@ -388,12 +388,14 @@ def skills_menu():
 
         if weapon_rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_just_pressed()[0]:
             if weapon_upgrades and knight.funds >= 50:
+                knight.funds -= 50
                 curr_weapon[0][2].equipped = False
                 curr_weapon[0] = weapon_upgrades.pop(0)
                 curr_weapon[0][2].equipped = True
 
         if shield_rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_just_pressed()[0]:
             if shield_upgrades and knight.funds >= 50:
+                knight.funds -= 50
                 curr_shield[0][2].equipped = False
                 curr_shield[0] = shield_upgrades.pop(0)
                 curr_shield[0][2].equipped = True
